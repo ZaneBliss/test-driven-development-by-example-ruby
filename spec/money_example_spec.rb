@@ -8,6 +8,10 @@ class Dollar
   def times(multiplier)
     self.class.new(amount * multiplier)
   end
+
+  def equals(dollar)
+    amount == dollar.amount
+  end
 end
 
 RSpec.describe "Money Example" do
@@ -17,5 +21,10 @@ RSpec.describe "Money Example" do
     expect(product.amount).to be(10)
     product = five.times(3)
     expect(product.amount).to be(15)
+  end
+
+  it "tests equality" do
+    expect(Dollar.new(5).equals(Dollar.new(5))).to be_truthy
+    expect(Dollar.new(5).equals(Dollar.new(6))).to be_falsey
   end
 end
