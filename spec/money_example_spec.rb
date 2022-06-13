@@ -1,5 +1,5 @@
 class Dollar
-  attr_accessor :amount
+  attr_reader :amount
 
   def initialize(amount)
     @amount = amount
@@ -9,18 +9,18 @@ class Dollar
     self.class.new(amount * multiplier)
   end
 
-  def equals(dollar)
+  def ==(dollar)
     amount == dollar.amount
   end
+
+  alias_method :equals, :==
 end
 
-RSpec.describe "Money Example" do
+RSpec.describe Dollar do
   it "multiplies" do
     five = Dollar.new(5)
-    product = five.times(2)
-    expect(product.amount).to be(10)
-    product = five.times(3)
-    expect(product.amount).to be(15)
+    expect(five.times(2)).to eq(Dollar.new(10))
+    expect(five.times(3)).to eq(Dollar.new(15))
   end
 
   it "tests equality" do
