@@ -1,37 +1,39 @@
-class Dollar
-  attr_reader :amount
-
+class Money
   def initialize(amount)
     @amount = amount
   end
 
-  def times(multiplier)
-    self.class.new(amount * multiplier)
-  end
-
-  def ==(dollar)
-    amount == dollar.amount
+  def ==(money)
+    amount == money.amount
   end
 
   alias_method :equals, :==
 end
 
-class Franc
+class Dollar < Money
   attr_reader :amount
 
   def initialize(amount)
-    @amount = amount
+    super(amount)
   end
 
   def times(multiplier)
     self.class.new(amount * multiplier)
   end
 
-  def ==(dollar)
-    amount == dollar.amount
+end
+
+class Franc < Money
+  attr_reader :amount
+
+  def initialize(amount)
+    super(amount)
   end
 
-  alias_method :equals, :==
+  def times(multiplier)
+    self.class.new(amount * multiplier)
+  end
+
 end
 
 RSpec.describe Dollar do
@@ -49,8 +51,13 @@ end
 
 RSpec.describe Franc do
   it "multiplies" do
-    five = Dollar.new(5)
-    expect(five.times(2)).to eq(Dollar.new(10))
-    expect(five.times(3)).to eq(Dollar.new(15))
+    five = Franc.new(5)
+    expect(five.times(2)).to eq(Franc.new(10))
+    expect(five.times(3)).to eq(Franc.new(15))
+  end
+
+  it "tests equality" do
+    expect(Franc.new(5).equals(Franc.new(5))).to be_truthy
+    expect(Franc.new(5).equals(Franc.new(6))).to be_falsey
   end
 end
