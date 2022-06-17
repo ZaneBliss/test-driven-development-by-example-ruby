@@ -4,7 +4,7 @@ class Money
   end
 
   def ==(money)
-    amount == money.amount
+    amount == money.amount && self.class == money.class
   end
 
   alias_method :equals, :==
@@ -36,7 +36,7 @@ class Franc < Money
 
 end
 
-RSpec.describe Dollar do
+RSpec.describe "Currency" do
   it "multiplies" do
     five = Dollar.new(5)
     expect(five.times(2)).to eq(Dollar.new(10))
@@ -46,17 +46,6 @@ RSpec.describe Dollar do
   it "tests equality" do
     expect(Dollar.new(5).equals(Dollar.new(5))).to be_truthy
     expect(Dollar.new(5).equals(Dollar.new(6))).to be_falsey
-  end
-end
-
-RSpec.describe Franc do
-  it "multiplies" do
-    five = Franc.new(5)
-    expect(five.times(2)).to eq(Franc.new(10))
-    expect(five.times(3)).to eq(Franc.new(15))
-  end
-
-  it "tests equality" do
     expect(Franc.new(5).equals(Franc.new(5))).to be_truthy
     expect(Franc.new(5).equals(Franc.new(6))).to be_falsey
   end
