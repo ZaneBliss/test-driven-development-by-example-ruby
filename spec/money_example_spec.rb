@@ -7,6 +7,14 @@ class Money
     amount == money.amount && self.class == money.class
   end
 
+  def self.dollar(amount)
+    Dollar.new(amount)
+  end
+
+  def self.franc(amount)
+    Franc.new(amount)
+  end
+
   alias_method :equals, :==
 end
 
@@ -38,15 +46,16 @@ end
 
 RSpec.describe "Currency" do
   it "multiplies" do
-    five = Dollar.new(5)
-    expect(five.times(2)).to eq(Dollar.new(10))
-    expect(five.times(3)).to eq(Dollar.new(15))
+    five = Money.dollar(5)
+    expect(five.times(2)).to eq(Money.dollar(10))
+    expect(five.times(3)).to eq(Money.dollar(15))
   end
 
   it "tests equality" do
-    expect(Dollar.new(5).equals(Dollar.new(5))).to be_truthy
-    expect(Dollar.new(5).equals(Dollar.new(6))).to be_falsey
-    expect(Franc.new(5).equals(Franc.new(5))).to be_truthy
-    expect(Franc.new(5).equals(Franc.new(6))).to be_falsey
+    expect(Money.dollar(5).equals(Money.dollar(5))).to be_truthy
+    expect(Money.dollar(5).equals(Money.dollar(6))).to be_falsey
+    expect(Money.franc(5).equals(Money.franc(5))).to be_truthy
+    expect(Money.franc(5).equals(Money.franc(6))).to be_falsey
+    expect(Money.franc(5).equals(Money.dollar(5))).to be_falsey
   end
 end
