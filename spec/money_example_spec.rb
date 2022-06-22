@@ -1,6 +1,7 @@
 class Money
-  def initialize(amount)
+  def initialize(amount, currency)
     @amount = amount
+    @currency = currency
   end
 
   def ==(money)
@@ -8,40 +9,38 @@ class Money
   end
 
   def self.dollar(amount)
-    Dollar.new(amount)
+    Dollar.new(amount, "USD")
   end
 
   def self.franc(amount)
-    Franc.new(amount)
+    Franc.new(amount, "CHF")
   end
 
   alias_method :equals, :==
 end
 
 class Dollar < Money
-  attr_reader :amount
+  attr_reader :amount, :currency
 
-  def initialize(amount)
-    super(amount)
+  def initialize(amount, currency)
+    super(amount, currency)
   end
 
   def times(multiplier)
-    self.class.new(amount * multiplier)
+    Money.dollar(amount * multiplier)
   end
-
 end
 
 class Franc < Money
-  attr_reader :amount
+  attr_reader :amount, :currency
 
-  def initialize(amount)
-    super(amount)
+  def initialize(amount, currency)
+    super(amount, currency)
   end
 
   def times(multiplier)
-    self.class.new(amount * multiplier)
+    Money.franc(amount * multiplier)
   end
-
 end
 
 RSpec.describe "Currency" do
@@ -57,5 +56,10 @@ RSpec.describe "Currency" do
     expect(Money.franc(5).equals(Money.franc(5))).to be_truthy
     expect(Money.franc(5).equals(Money.franc(6))).to be_falsey
     expect(Money.franc(5).equals(Money.dollar(5))).to be_falsey
+  end
+
+  it "converts" do
+    expect(Money.dollar(1).currency).to eq("USD")
+    expect(Money.franc(1).currency).to eq("CHF")
   end
 end
